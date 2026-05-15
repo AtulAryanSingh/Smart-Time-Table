@@ -1,0 +1,10 @@
+<?php require_once __DIR__ . '/../../../app/bootstrap.php';
+require_admin();
+$id = (int)($_POST['id'] ?? 0);
+$name = trim($_POST['name'] ?? '');
+$capacity = (int)($_POST['capacity'] ?? 0);
+if ($id <= 0 || $name === '' || $capacity <= 0) fail('Valid id, name and capacity required');
+$pdo = db();
+$stmt = $pdo->prepare('UPDATE rooms SET name=?, capacity=? WHERE id=?');
+$stmt->execute([$name, $capacity, $id]);
+ok(['updated' => true]);
